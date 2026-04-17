@@ -1,45 +1,89 @@
-// --- DATABASE MOCK (Gestão de Dados) ---
-const methods = [
-    {
-        title: "Energia Renovável",
-        desc: "Substituição de combustíveis fósseis por fontes solar e eólica para reduzir a poluição do ar.",
-        image: "https://images.unsplash.com/photo-1466611653911-954ffaa13f6c?auto=format&fit=crop&w=600"
-    },
-    {
-        title: "Economia Circular",
-        desc: "Foco no reaproveitamento e reciclagem total para eliminar resíduos em aterros e oceanos.",
-        image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=600"
-    },
-    {
-        title: "Reflorestamento",
-        desc: "Plante árvores para absorver CO2 e filtrar poluentes do solo e da água naturalmente.",
-        image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600"
-    }
+// --- GESTÃO DE DADOS (Renderização Dinâmica) ---
+const methodsData = [
+    { title: "Energia Renovável", desc: "Substituição de fósseis por solar e eólica." },
+    { title: "Economia Circular", desc: "Redesenho de produtos para desperdício zero." },
+    { title: "Reflorestamento", desc: "Recuperação de biomas para captura de carbono." }
 ];
 
-// --- RENDERIZAÇÃO DINÂMICA ---
+const faqData = [
+    { q: "Como posso reduzir o plástico?", a: "Comece substituindo descartáveis por reutilizáveis e apoiando leis de banimento." },
+    { q: "O que é poluição difusa?", a: "É aquela que vem de várias fontes não pontuais, como o escoamento da chuva." }
+];
+
+// --- RENDERIZAÇÃO ---
 function init() {
     const grid = document.getElementById('solutions-grid');
-    
-    methods.forEach(item => {
-        const card = `
+    methodsData.forEach(item => {
+        grid.innerHTML += `
             <article class="card">
-                <img src="${item.image}" alt="Representação visual de ${item.title}">
-                <div class="card-content">
-                    <h3>${item.title}</h3>
-                    <p>${item.desc}</p>
-                </div>
+                <h3>${item.title}</h3>
+                <p>${item.desc}</p>
             </article>
         `;
-        grid.innerHTML += card;
     });
 
-    setupCarousel();
+    const accordion = document.getElementById('accordion-container');
+    faqData.forEach((item, index) => {
+        accordion.innerHTML += `
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(${index})" aria-expanded="false">
+                    ${item.q}
+                </button>
+                <div class="accordion-content" id="content-${index}">
+                    <p>${item.a}</p>
+                </div>
+            </div>
+        `;
+    });
+    
     setupScrollReveal();
 }
 
 // --- ACESSIBILIDADE: CONTROLE DE FONTE ---
-let fontSize = 16;
-function updateFontSize(delta) {
-    fontSize += delta * 2;
-    document.documentElement.style.setProperty('--font-size', fontSize + 'px');
+let currentFontSize = 16;
+function changeFontSize(action) {
+    currentFontSize = action === 'increase' ? currentFontSize + 2 : currentFontSize - 2;
+    document.documentElement.style.setProperty('--font-base', currentFontSize + 'px');
+}
+
+// --- ACESSIBILIDADE: ALTO CONTRASTE ---
+document.getElementById('toggle-contrast').addEventListener('click', () => {
+    document.body.classList.toggle('high-contrast');
+});
+
+// --- COMPONENTE: ACORDEÃO ---
+function toggleAccordion(index) {
+    const contents = document.querySelectorAll('.accordion-content');
+    contents[index].classList.toggle('active');
+}
+
+// --- COMPONENTE: CARROSSEL BÁSICO ---
+let currentSlide = 0;
+const track = document.getElementById('carousel-track');
+// Adicionar itens ao carrossel
+['Oceano Limpo', 'Cidades Verdes', 'Ar Puro'].forEach(text => {
+    track.innerHTML += `<div class="carousel-item"><h3>${text}</h3></div>`;
+});
+
+document.querySelector('.next').addEventListener('click', () => {
+    currentSlide = (currentSlide + 1) % 3;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+});
+
+document.querySelector('.prev').addEventListener('click', () => {
+    currentSlide = (currentSlide - 1 + 3) % 3;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+});
+
+// --- SCROLL REVEAL (Observer API) ---
+function setupScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+}
+
+window.onload = init;
