@@ -1,89 +1,113 @@
-// --- GESTÃO DE DADOS (Renderização Dinâmica) ---
-const methodsData = [
-    { title: "Energia Renovável", desc: "Substituição de fósseis por solar e eólica." },
-    { title: "Economia Circular", desc: "Redesenho de produtos para desperdício zero." },
-    { title: "Reflorestamento", desc: "Recuperação de biomas para captura de carbono." }
-];
-
-const faqData = [
-    { q: "Como posso reduzir o plástico?", a: "Comece substituindo descartáveis por reutilizáveis e apoiando leis de banimento." },
-    { q: "O que é poluição difusa?", a: "É aquela que vem de várias fontes não pontuais, como o escoamento da chuva." }
-];
-
-// --- RENDERIZAÇÃO ---
-function init() {
-    const grid = document.getElementById('solutions-grid');
-    methodsData.forEach(item => {
-        grid.innerHTML += `
-            <article class="card">
-                <h3>${item.title}</h3>
-                <p>${item.desc}</p>
-            </article>
-        `;
-    });
-
-    const accordion = document.getElementById('accordion-container');
-    faqData.forEach((item, index) => {
-        accordion.innerHTML += `
-            <div class="accordion-item">
-                <button class="accordion-header" onclick="toggleAccordion(${index})" aria-expanded="false">
-                    ${item.q}
-                </button>
-                <div class="accordion-content" id="content-${index}">
-                    <p>${item.a}</p>
-                </div>
-            </div>
-        `;
-    });
-    
-    setupScrollReveal();
+/* --- DESIGN SYSTEM & VARIÁVEIS --- */
+:root {
+    --primary: #2d6a4f;
+    --secondary: #d8f3dc;
+    --accent: #1b4332;
+    --bg: #ffffff;
+    --text: #2b2d42;
+    --radius: 16px;
+    --font-size: 16px;
+    --transition: 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-// --- ACESSIBILIDADE: CONTROLE DE FONTE ---
-let currentFontSize = 16;
-function changeFontSize(action) {
-    currentFontSize = action === 'increase' ? currentFontSize + 2 : currentFontSize - 2;
-    document.documentElement.style.setProperty('--font-base', currentFontSize + 'px');
+/* --- ALTO CONTRASTE --- */
+body.high-contrast {
+    --primary: #ffff00;
+    --bg: #000000;
+    --text: #ffffff;
+    --secondary: #333333;
 }
 
-// --- ACESSIBILIDADE: ALTO CONTRASTE ---
-document.getElementById('toggle-contrast').addEventListener('click', () => {
-    document.body.classList.toggle('high-contrast');
-});
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-// --- COMPONENTE: ACORDEÃO ---
-function toggleAccordion(index) {
-    const contents = document.querySelectorAll('.accordion-content');
-    contents[index].classList.toggle('active');
+body {
+    font-size: var(--font-size);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-// --- COMPONENTE: CARROSSEL BÁSICO ---
-let currentSlide = 0;
-const track = document.getElementById('carousel-track');
-// Adicionar itens ao carrossel
-['Oceano Limpo', 'Cidades Verdes', 'Ar Puro'].forEach(text => {
-    track.innerHTML += `<div class="carousel-item"><h3>${text}</h3></div>`;
-});
-
-document.querySelector('.next').addEventListener('click', () => {
-    currentSlide = (currentSlide + 1) % 3;
-    track.style.transform = `translateX(-${currentSlide * 100}%)`;
-});
-
-document.querySelector('.prev').addEventListener('click', () => {
-    currentSlide = (currentSlide - 1 + 3) % 3;
-    track.style.transform = `translateX(-${currentSlide * 100}%)`;
-});
-
-// --- SCROLL REVEAL (Observer API) ---
-function setupScrollReveal() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+/* --- GRID & FLEXBOX (Layout Responsivo) --- */
+.grid-container {
+    display: grid;
+    gap: 2rem;
+    padding: 2rem;
+    /* Grid dinâmico: 1 col mobile, 3 col desktop */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-window.onload = init;
+header {
+    background: var(--primary);
+    padding: 1rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- COMPONENTES --- */
+.card {
+    background: var(--secondary);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content { padding: 1.5rem; }
+
+/* --- CARROSSEL --- */
+.carousel {
+    position: relative;
+    width: 90%;
+    margin: 3rem auto;
+    overflow: hidden;
+    border-radius: var(--radius);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    height: 400px;
+}
+
+.slide img { width: 100%; height: 100%; object-fit: cover; }
+
+/* --- ANIMAÇÕES (Scroll Reveal) --- */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: var(--transition);
+}
+
+.scroll-reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Botões de Acessibilidade */
+.accessibility-toolbar button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
