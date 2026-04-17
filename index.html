@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoAção - Soluções para a Poluição Ambiental</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav aria-label="Menu Principal">
+            <div class="logo">EcoAção</div>
+            <div class="accessibility-controls">
+                <button onclick="changeFontSize('increase')" aria-label="Aumentar fonte">A+</button>
+                <button onclick="changeFontSize('decrease')" aria-label="Diminuir fonte">A-</button>
+                <button id="toggle-contrast" aria-label="Alternar Alto Contraste">🌓</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero scroll-reveal">
+            <h1>Acabar com a poluição exige ação hoje.</h1>
+            <p>Descubra métodos eficazes para restaurar nosso ecossistema.</p>
+        </section>
+
+        <section id="solutions" class="scroll-reveal">
+            <h2>Métodos de Combate</h2>
+            <div class="grid-container" id="solutions-grid" role="region" aria-live="polite">
+                </div>
+        </section>
+
+        <section class="accordion-section scroll-reveal">
+            <h2>Perguntas Frequentes</h2>
+            <div id="accordion-container"></div>
+        </section>
+
+        <section class="carousel-section scroll-reveal">
+            <h2>Nossa Galeria de Impacto</h2>
+            <div class="carousel" role="region" aria-roledescription="carousel">
+                <div class="carousel-inner" id="carousel-track"></div>
+                <button class="prev" aria-label="Slide anterior">❮</button>
+                <button class="next" aria-label="Próximo slide">❯</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="scroll-reveal">
+        <p>&copy; 2026 EcoAção - Design Inclusivo para um Mundo Sustentável.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
