@@ -1,0 +1,123 @@
+/* --- CONFIGURAÇÕES GERAIS E VARIÁVEIS --- */
+:root {
+    --primary: #2d6a4f;
+    --secondary: #d8f3dc;
+    --bg-color: #f8f9fa;
+    --text-color: #1b4332;
+    --white: #ffffff;
+    --radius: 12px;
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    --font-base: 16px;
+}
+
+/* --- MODO ALTO CONTRASTE --- */
+body.high-contrast {
+    --primary: #ffff00;
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --secondary: #333333;
+    --white: #1a1a1a;
+}
+
+html { font-size: var(--font-base); scroll-behavior: smooth; }
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* --- LAYOUT GRID (Edite aqui as colunas) --- */
+.grid-container {
+    display: grid;
+    gap: 2rem;
+    padding: 2rem;
+    /* Mobile: 1 coluna | Desktop: 3 colunas */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+header {
+    background: var(--primary);
+    color: var(--white);
+    padding: 1rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- COMPONENTES --- */
+.card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: var(--transition);
+}
+
+.card:hover { transform: translateY(-5px); }
+
+.accordion-item {
+    border-bottom: 1px solid var(--secondary);
+    width: 90%;
+    margin: 0 auto;
+}
+
+.accordion-header {
+    width: 100%;
+    padding: 1rem;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.accordion-content {
+    display: none;
+    padding: 1rem;
+}
+
+.accordion-content.active { display: block; }
+
+/* --- CARROSSEL --- */
+.carousel {
+    position: relative;
+    overflow: hidden;
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-item {
+    min-width: 100%;
+    height: 300px;
+    background: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- ANIMAÇÕES --- */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: var(--transition);
+}
+
+.scroll-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
